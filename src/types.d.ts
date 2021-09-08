@@ -17,11 +17,10 @@ interface Filter {
   tags?: string[];
 }
 
-interface Storage {
+interface StorageService {
   getAllTasks(): Promise<Task[]>;
   getTask(id: number): Promise<Task | null>;
   updateTask(id: number, payload: Partial<Task>): Promise<boolean>;
-  addNewTask(taskData: TaskData): Promise<boolean>;
+  addNewTask(taskData: TaskData): Promise<number | null>;
   deleteTask(id: number): Promise<boolean>;
-  findTask(filter: Filter): Promise<Task[]>;
 }
