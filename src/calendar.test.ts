@@ -1,8 +1,7 @@
-import { Calendar } from "./calendar";
+import { CalendarService } from "./calendar";
 
 describe("testing Calendar", () => {
   test("it is a function", () => {
-    expect(Calendar).toBeInstanceOf(Function);
-    expect(new Calendar()).toBeInstanceOf(Calendar);
+    expect(CalendarService).toBeInstanceOf(Function);
   });
 });
