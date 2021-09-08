@@ -15,7 +15,12 @@ export class LocalStorageService implements StorageService {
   };
 
   getAllTasks = async (): Promise<Task[]> => {
-    return JSON.parse(localStorage.getItem("tasks") ?? "");
+    const result = await localStorage.getItem("tasks");
+    const tasks = JSON.parse(result ?? "[]");
+    tasks.forEach((task: Task) => {
+      task.date = new Date(task.date);
+    });
+    return tasks;
   };
 
   getTask = async (id: number): Promise<Task | null> => {
