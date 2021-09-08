@@ -1,25 +1,40 @@
-export abstract class CalendarService {
+export class CalendarService {
   private tasks: Task[] = [];
 
-  constructor() {
+  private storage: Storage;
+
+  constructor(storage: Storage) {
+    this.storage = storage;
     this.getAllTasks().then((tasks) => {
       this.tasks = tasks;
     });
   }
 
-  abstract getAllTasks(): Promise<Task[]>;
+  async getAllTasks(): Promise<Task[]> {
+    return this.storage.getAllTasks();
+  }
 
-  abstract getTask(id: number): Promise<Task | null>;
+  async getTask(id: number): Promise<Task | null> {
+    return this.storage.getTask(id);
+  }
 
-  abstract updateTask(id: number, payload: Partial<Task>): Promise<boolean>;
+  async updateTask(id: number, payload: Partial<Task>): Promise<boolean> {
+    return this.storage.updateTask(id, payload);
+  }
 
-  abstract addNewTask(taskData: TaskData): Promise<boolean>;
+  async addNewTask(taskData: TaskData): Promise<boolean> {
+    return this.storage.addNewTask(taskData);
+  }
 
-  abstract deleteTask(id: number): Promise<boolean>;
+  async deleteTask(id: number): Promise<boolean> {
+    return this.storage.deleteTask(id);
+  }
 
-  abstract findTask(): Promise<Task[]>;
+  async findTask(filter: Filter): Promise<Task[]> {
+    return this.storage.findTask(filter);
+  }
 
-  protected filterTasks(filter: Filter): Task[] {
+  protected getTasksByFilter(filter: Filter): Task[] {
     const { toDate, fromDate, description, status, tags } = filter;
     const filteredTasks: Task[] = [];
     this.tasks.forEach((task): void => {
