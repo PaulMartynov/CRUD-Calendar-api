@@ -4,6 +4,7 @@ export class LocalStorageService implements StorageService {
     const lastId = tasks[tasks.length - 1] ? tasks[tasks.length - 1].id : 0;
     const id = lastId + 1;
     tasks.push({ id, ...taskData });
+    await localStorage.setItem("tasks", JSON.stringify(tasks));
     return id;
   };
 
@@ -20,24 +21,31 @@ export class LocalStorageService implements StorageService {
     tasks.forEach((task: Task) => {
       task.date = new Date(task.date);
     });
+    tasks.sort((a: Task, b: Task) => {
+      return a.id - b.id;
+    });
     return tasks;
   };
 
   getTask = async (id: number): Promise<Task | null> => {
     const tasks: Task[] = await this.getAllTasks();
-    if (!tasks[id]) {
+    const task = tasks.find((item) => item.id === id);
+    if (!task) {
       return null;
     }
-    return tasks[id];
+    return task;
   };
 
   updateTask = async (id: number, payload: Partial<Task>): Promise<boolean> => {
     const tasks: Task[] = await this.getAllTasks();
-    if (!tasks[id]) {
+    let task = tasks.find((item) => item.id === id);
+    if (!task) {
       return false;
     }
-    tasks[id] = { ...tasks[id], ...payload };
-    await localStorage.setItem("tasks", JSON.stringify(tasks));
+    task = { ...task, ...payload };
+    const newTasks = tasks.filter((item) => item.id !== id);
+    newTasks.push(task);
+    await localStorage.setItem("tasks", JSON.stringify(newTasks));
     return true;
   };
 }
