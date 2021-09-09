@@ -1,3 +1,5 @@
+import { getTasksByFilter } from "./utils/filter";
+
 export class LocalStorageService implements StorageService {
   addNewTask = async (taskData: TaskData): Promise<number | null> => {
     const tasks: Task[] = await this.getAllTasks();
@@ -47,5 +49,10 @@ export class LocalStorageService implements StorageService {
     newTasks.push(task);
     await localStorage.setItem("tasks", JSON.stringify(newTasks));
     return true;
+  };
+
+  findTasks = async (filter: Filter): Promise<Task[]> => {
+    const tasks = await this.getAllTasks();
+    return getTasksByFilter(tasks, filter);
   };
 }

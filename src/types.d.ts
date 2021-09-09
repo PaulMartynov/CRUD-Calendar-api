@@ -23,4 +23,5 @@ interface StorageService {
   updateTask(id: number, payload: Partial<Task>): Promise<boolean>;
   addNewTask(taskData: TaskData): Promise<number | null>;
   deleteTask(id: number): Promise<boolean>;
+  findTasks(filter: Filter): Promise<Task[]>;
 }
