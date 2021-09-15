@@ -6,19 +6,19 @@ export class LocalStorageService implements StorageService {
     const lastId = tasks[tasks.length - 1] ? tasks[tasks.length - 1].id : 0;
     const id = lastId + 1;
     tasks.push({ id, ...taskData });
-    await localStorage.setItem("tasks", JSON.stringify(tasks));
+    localStorage.setItem("tasks", JSON.stringify(tasks));
     return id;
   };
 
   deleteTask = async (id: number): Promise<boolean> => {
     const tasks: Task[] = await this.getAllTasks();
     const newTasks = tasks.filter((task) => task.id !== id);
-    await localStorage.setItem("tasks", JSON.stringify(newTasks));
+    localStorage.setItem("tasks", JSON.stringify(newTasks));
     return true;
   };
 
   getAllTasks = async (): Promise<Task[]> => {
-    const result = await localStorage.getItem("tasks");
+    const result = localStorage.getItem("tasks");
     const tasks = JSON.parse(result ?? "[]");
     tasks.forEach((task: Task) => {
       task.date = new Date(task.date);
